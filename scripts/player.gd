@@ -31,17 +31,20 @@ func _physics_process(delta):
 		velocity.y = JUMP_VELOCITY * jump_power
 		deltaTimeSinceStart = 0
 	
+	# Handle air movement
 	if not is_on_floor() and (Input.is_action_just_pressed("left") or Input.is_action_just_pressed("right")):
 		changedDirectionInAir = true
 	
+	# Handle movement
 	var direction = Input.get_axis("left", "right")
+	changeSpriteDirection(direction)
 	if is_on_floor() and not deltaTimeSinceStart > 0:
 		resetMoveVelocity()
 		animated_sprite.play("idle")
 	elif not is_jump_loading and not is_on_floor():
 		if direction:
 			if changedDirectionInAir:
-				velocity.x = direction * 0.4 * SPEED
+				velocity.x = direction * 0.3 * SPEED
 			else:
 				velocity.x = direction * SPEED
 	else:
@@ -52,3 +55,16 @@ func _physics_process(delta):
 func resetMoveVelocity():
 	velocity.x = 0
 	changedDirectionInAir = false
+
+func changeSpriteDirection(direction):
+	if animated_sprite.flip_h:
+		if direction <= 0:
+			animated_sprite.flip_h = true
+		else:
+			animated_sprite.flip_h = false
+	
+	else:
+		if direction >= 0:
+			animated_sprite.flip_h = false
+		else:
+			animated_sprite.flip_h = true
