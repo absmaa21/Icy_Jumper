@@ -4,6 +4,9 @@ extends CharacterBody2D
 @export var jump_velocity: float = -500.0
 @export var mid_air_direction_movment: float = 0.3
 @export var jump_direction_movement: float = 1.2
+@export var min_jump_charge_time: float = 0.1
+@export var max_jump_charge_time: float = 0.7
+@export var auto_jump_on_max_charge_time_reached: bool = true
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -25,10 +28,10 @@ func _physics_process(delta):
 		is_jump_loading = true
 		animated_sprite.play("jump_load")
 		deltaTimeSinceStart += delta
-	if Input.is_action_just_released("jump") and is_on_floor():
+	if (Input.is_action_just_released("jump") or (deltaTimeSinceStart >= max_jump_charge_time and auto_jump_on_max_charge_time_reached)) and is_on_floor():
 		is_jump_loading = false
 		print(deltaTimeSinceStart)
-		var jump_power = clamp(deltaTimeSinceStart, 0.1, 0.7)
+		var jump_power = clamp(deltaTimeSinceStart, min_jump_charge_time, max_jump_charge_time)
 		velocity.y = jump_velocity * jump_power
 		deltaTimeSinceStart = 0
 	
