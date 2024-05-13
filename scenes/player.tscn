@@ -1,7 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://c2hmw8gdicq0n"]
+[gd_scene load_steps=15 format=3 uid="uid://c2hmw8gdicq0n"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_ysyla"]
-[ext_resource type="Texture2D" uid="uid://ch8sopoeaatng" path="res://assets/sprites/mc-sheet.png" id="2_yeu3v"]
+[ext_resource type="Texture2D" uid="uid://ch8sopoeaatng" path="res://assets/sprites/MC-Sheet.png" id="2_yeu3v"]
+[ext_resource type="AudioStream" uid="uid://d2gfltf0f1hyd" path="res://assets/sounds/jump.wav" id="3_nrry2"]
+[ext_resource type="AudioStream" uid="uid://beku7q8hqayio" path="res://assets/sounds/fall.wav" id="4_a8t4q"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_awl63"]
 atlas = ExtResource("2_yeu3v")
@@ -10,6 +12,10 @@ region = Rect2(96, 0, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_kxulh"]
 atlas = ExtResource("2_yeu3v")
 region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_doc5a"]
+atlas = ExtResource("2_yeu3v")
+region = Rect2(112, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3d4i5"]
 atlas = ExtResource("2_yeu3v")
@@ -51,6 +57,14 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_doc5a")
+}],
+"loop": true,
+"name": &"fell_from_high",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_3d4i5")
 }, {
 "duration": 1.0,
@@ -58,7 +72,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 5.0
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -90,9 +104,26 @@ script = ExtResource("1_ysyla")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_n7jxe")
-animation = &"fall"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_565pu")
+
+[node name="FallTime" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true
+
+[node name="Sounds" type="Node" parent="."]
+
+[node name="Jump" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("3_nrry2")
+bus = &"Sound Effects"
+
+[node name="FallOntoGround" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource("4_a8t4q")
+volume_db = -8.0
+bus = &"Sound Effects"
+
+[connection signal="timeout" from="FallTime" to="." method="_on_fall_time_timeout"]
