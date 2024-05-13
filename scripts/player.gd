@@ -1,8 +1,9 @@
 extends CharacterBody2D
 
-
-const SPEED = 70.0
-const JUMP_VELOCITY = -500.0
+@export var speed: float = 70.0
+@export var jump_velocity: float = -500.0
+@export var mid_air_direction_movment: float = 0.3
+@export var jump_direction_movement: float = 1.2
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -28,7 +29,7 @@ func _physics_process(delta):
 		is_jump_loading = false
 		print(deltaTimeSinceStart)
 		var jump_power = clamp(deltaTimeSinceStart, 0.1, 0.7)
-		velocity.y = JUMP_VELOCITY * jump_power
+		velocity.y = jump_velocity * jump_power
 		deltaTimeSinceStart = 0
 	
 	# Handle air movement
@@ -44,9 +45,9 @@ func _physics_process(delta):
 	elif not is_jump_loading and not is_on_floor():
 		if direction:
 			if changedDirectionInAir:
-				velocity.x = direction * 0.3 * SPEED
+				velocity.x = direction * mid_air_direction_movment * speed
 			else:
-				velocity.x = direction * SPEED
+				velocity.x = direction * jump_direction_movement * speed
 	else:
 		resetMoveVelocity()
 
