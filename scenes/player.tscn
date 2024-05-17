@@ -112,7 +112,7 @@ position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_565pu")
 
 [node name="FallTime" type="Timer" parent="."]
-wait_time = 0.6
+wait_time = 0.45
 one_shot = true
 
 [node name="Sounds" type="Node" parent="."]
