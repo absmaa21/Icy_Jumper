@@ -1,0 +1,11 @@
+[gd_resource type="TileSet" format=3 uid="uid://caeg2vlt7a802"]
+
+[resource]
+tile_size = Vector2i(8, 8)
+physics_layer_0/collision_layer = 0
+physics_layer_0/collision_mask = 0
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Cave"
+terrain_set_0/terrain_0/color = Color(0.152737, 0.212079, 0.425153, 1)
+terrain_set_0/terrain_1/name = "Cave-Platform"
+terrain_set_0/terrain_1/color = Color(0.397497, 0.617744, 0.882926, 1)
