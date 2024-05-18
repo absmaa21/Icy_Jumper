@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dmpgq7f1di0ry"]
+[gd_scene load_steps=17 format=3 uid="uid://dmpgq7f1di0ry"]
 
 [ext_resource type="PackedScene" uid="uid://c2hmw8gdicq0n" path="res://scenes/player.tscn" id="1_3yl0q"]
 [ext_resource type="Texture2D" uid="uid://dp30bn5bloxid" path="res://assets/sprites/cave-tileset.png" id="2_0xmgn"]
@@ -7,6 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://b2pd4tbwjly2p" path="res://assets/music/dungeon_ambient.ogg" id="5_0dqad"]
 [ext_resource type="Script" path="res://scripts/moving_platform.gd" id="6_4bp71"]
 [ext_resource type="TileSet" uid="uid://bbxslnhgdm4pl" path="res://resources/tile_sets/prototype_world_no_collision.tres" id="7_lq4fs"]
+[ext_resource type="PackedScene" uid="uid://b0i7dtvt08h4f" path="res://scenes/platform_one_way.tscn" id="8_rjvt2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k13ut"]
 texture = ExtResource("2_0xmgn")
@@ -326,6 +327,44 @@ point_count = 3
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_twjsj"]
 size = Vector2(24, 8)
 
+[sub_resource type="Animation" id="Animation_ea2nx"]
+resource_name = "move"
+length = 4.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-40, -148), Vector2(-40, -192)]
+}
+
+[sub_resource type="Animation" id="Animation_a42dy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-40, -148)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_swks1"]
+_data = {
+"RESET": SubResource("Animation_a42dy"),
+"move": SubResource("Animation_ea2nx")
+}
+
 [node name="Prototype" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_3yl0q")]
@@ -404,3 +443,12 @@ shape = SubResource("RectangleShape2D_twjsj")
 tile_set = ExtResource("7_lq4fs")
 format = 2
 layer_0/tile_data = PackedInt32Array(-1, 0, 3, -65535, 131072, 3, -65536, 65536, 3)
+
+[node name="PlatformOneWay" parent="." instance=ExtResource("8_rjvt2")]
+position = Vector2(-40, -148)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlatformOneWay"]
+libraries = {
+"": SubResource("AnimationLibrary_swks1")
+}
+autoplay = "move"
